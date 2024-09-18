@@ -47,7 +47,7 @@ function(fdict_fyppify)
  ]==]
 
  if(NOT DEFINED _fyppify_FYPP)
-   set(_fyppify_FYPP ${FYPP})
+   set(_fyppify_FYPP "${FDICT_FYPP}")
  endif()
  if(NOT DEFINED _fyppify_EXTIN)
    set(_fyppify_EXTIN "fypp")

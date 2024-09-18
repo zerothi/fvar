@@ -19,7 +19,7 @@ ${default}$
 
 
 #! Global definitions of the precision declarations
-#:if defined("WITH_ALL")
+#:if defined("FDICT_WITH_ALL")
 #: set def_all = True
 #:else
 #: set def_all = False
@@ -28,8 +28,8 @@ ${default}$
 
 #! Cray compilers do not like pure interfaces
 #! this is a way to disable it
-$:setvar("WITH_PURE_INTERFACE", bool(getvar("WITH_PURE_INTERFACE", True)))
-#:if WITH_PURE_INTERFACE == 1
+$:setvar("FDICT_WITH_PURE_INTERFACE", bool(getvar("FDICT_WITH_PURE_INTERFACE", True)))
+#:if FDICT_WITH_PURE_INTERFACE == 1
 #: set _pure = "pure"
 #: set _elemental = "elemental"
 #:else
@@ -39,30 +39,30 @@ $:setvar("WITH_PURE_INTERFACE", bool(getvar("WITH_PURE_INTERFACE", True)))
 
 
 
-$:setvar("WITH_ISO_ENV", bool(getvar("WITH_ISO_ENV", def_all)))
-$:setvar("WITH_ISO_C", bool(getvar("WITH_ISO_C", def_all)))
+$:setvar("FDICT_WITH_ISO_ENV", bool(getvar("FDICT_WITH_ISO_ENV", def_all)))
+$:setvar("FDICT_WITH_ISO_C", bool(getvar("FDICT_WITH_ISO_C", def_all)))
 
 #! extended and quadruple precision
-$:setvar("WITH_REAL80", bool(getvar("WITH_REAL80", def_all)))
-$:setvar("WITH_REAL128", bool(getvar("WITH_REAL128", def_all)))
+$:setvar("FDICT_WITH_REAL80", bool(getvar("FDICT_WITH_REAL80", def_all)))
+$:setvar("FDICT_WITH_REAL128", bool(getvar("FDICT_WITH_REAL128", def_all)))
 
 #! byte, short and long logical
-$:setvar("WITH_LOG8", bool(getvar("WITH_LOG8", def_all)))
-$:setvar("WITH_LOG16", bool(getvar("WITH_LOG16", def_all)))
-$:setvar("WITH_LOG64", bool(getvar("WITH_LOG64", def_all)))
+$:setvar("FDICT_WITH_LOG8", bool(getvar("FDICT_WITH_LOG8", def_all)))
+$:setvar("FDICT_WITH_LOG16", bool(getvar("FDICT_WITH_LOG16", def_all)))
+$:setvar("FDICT_WITH_LOG64", bool(getvar("FDICT_WITH_LOG64", def_all)))
 
 #! byte and short integer
-$:setvar("WITH_INT8", bool(getvar("WITH_INT8", WITH_LOG8)))
-$:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
+$:setvar("FDICT_WITH_INT8", bool(getvar("FDICT_WITH_INT8", FDICT_WITH_LOG8)))
+$:setvar("FDICT_WITH_INT16", bool(getvar("FDICT_WITH_INT16", FDICT_WITH_LOG16)))
 
 
 
 #! Real kinds to be considered during templating
 #:set REAL_KINDS = ["real32", "real64"]
-#:if WITH_REAL80 == 1
+#:if FDICT_WITH_REAL80 == 1
   #:set REAL_KINDS = REAL_KINDS + ["real80"]
 #:endif
-#:if WITH_REAL128 == 1
+#:if FDICT_WITH_REAL128 == 1
   #:set REAL_KINDS = REAL_KINDS + ["real128"]
 #:endif
 
@@ -72,10 +72,10 @@ $:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
 
 #! Complex kinds to be considered during templating
 #:set CMPLX_KINDS = ["real32", "real64"]
-#:if WITH_REAL80 == 1
+#:if FDICT_WITH_REAL80 == 1
   #:set CMPLX_KINDS = CMPLX_KINDS + ["real80"]
 #:endif
-#:if WITH_REAL128 == 1
+#:if FDICT_WITH_REAL128 == 1
   #:set CMPLX_KINDS = CMPLX_KINDS + ["real128"]
 #:endif
 
@@ -85,10 +85,10 @@ $:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
 
 #! Integer kinds to be considered during templating
 #:set INT_KINDS = ["int32", "int64"]
-#:if WITH_INT16 == 1
+#:if FDICT_WITH_INT16 == 1
   #:set INT_KINDS = ["int16"] + INT_KINDS
 #:endif
-#:if WITH_INT8 == 1
+#:if FDICT_WITH_INT8 == 1
   #:set INT_KINDS = ["int8"] + INT_KINDS
 #:endif
 
@@ -98,13 +98,13 @@ $:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
 
 #! Logical kinds to be considered during templating
 #:set LOG_KINDS = ["int32"]
-#:if WITH_LOG16 == 1
+#:if FDICT_WITH_LOG16 == 1
   #:set LOG_KINDS = ["int16"] + LOG_KINDS
 #:endif
-#:if WITH_LOG8 == 1
+#:if FDICT_WITH_LOG8 == 1
   #:set LOG_KINDS = ["int8"] + LOG_KINDS
 #:endif
-#:if WITH_LOG64 == 1
+#:if FDICT_WITH_LOG64 == 1
   #:set LOG_KINDS = LOG_KINDS + ["int64"]
 #:endif
 
@@ -117,7 +117,7 @@ $:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
 #:set CHAR_SHORTS = ["a1"]
 
 
-#:if WITH_ISO_C == 1
+#:if FDICT_WITH_ISO_C == 1
   #:set ISOC_KINDS = ["c_ptr", "c_funptr"]
   #:set ISOC_SHORTS = ["pt", "fpt"]
 #:else
@@ -138,24 +138,24 @@ $:setvar("WITH_INT16", bool(getvar("WITH_INT16", WITH_LOG16)))
 
 
 #! Ranks to be generated when templates are created
-#:set MAXRANK = getvar("MAXRANK", 5)
+#:set FDICT_MAXRANK = getvar("FDICT_MAXRANK", 5)
 
 #! Max-ranks for the different types
 #:set REAL_MIN_RANKS = [0 for _ in REAL_KINDS]
-$:setvar("MAXRANK_REAL", getvar("MAXRANK_REAL", MAXRANK))
-#:set REAL_MAX_RANKS = [MAXRANK_REAL for _ in REAL_KINDS]
+$:setvar("FDICT_MAXRANK_REAL", getvar("FDICT_MAXRANK_REAL", FDICT_MAXRANK))
+#:set REAL_MAX_RANKS = [FDICT_MAXRANK_REAL for _ in REAL_KINDS]
 
 #:set CMPLX_MIN_RANKS = [0 for _ in CMPLX_KINDS]
-$:setvar("MAXRANK_CMPLX", getvar("MAXRANK_CMPLX", MAXRANK))
-#:set CMPLX_MAX_RANKS = [MAXRANK_CMPLX for _ in CMPLX_KINDS]
+$:setvar("FDICT_MAXRANK_CMPLX", getvar("FDICT_MAXRANK_CMPLX", FDICT_MAXRANK))
+#:set CMPLX_MAX_RANKS = [FDICT_MAXRANK_CMPLX for _ in CMPLX_KINDS]
 
 #:set INT_MIN_RANKS = [0 for _ in INT_KINDS]
-$:setvar("MAXRANK_INT", getvar("MAXRANK_INT", MAXRANK))
-#:set INT_MAX_RANKS = [MAXRANK_INT for _ in INT_KINDS]
+$:setvar("FDICT_MAXRANK_INT", getvar("FDICT_MAXRANK_INT", FDICT_MAXRANK))
+#:set INT_MAX_RANKS = [FDICT_MAXRANK_INT for _ in INT_KINDS]
 
 #:set LOG_MIN_RANKS = [0 for _ in LOG_KINDS]
-$:setvar("MAXRANK_LOG", getvar("MAXRANK_LOG", MAXRANK))
-#:set LOG_MAX_RANKS = [MAXRANK_LOG for _ in LOG_KINDS]
+$:setvar("FDICT_MAXRANK_LOG", getvar("FDICT_MAXRANK_LOG", FDICT_MAXRANK))
+#:set LOG_MAX_RANKS = [FDICT_MAXRANK_LOG for _ in LOG_KINDS]
 
 #! The character(len=*) will be type matched with character(len=1), hence we do not allow
 #!   character(len=1) :: a
@@ -164,8 +164,8 @@ $:setvar("MAXRANK_LOG", getvar("MAXRANK_LOG", MAXRANK))
 #:set CHAR_MAX_RANKS = [1 for _ in CHAR_KINDS]
 #:set ISOC_MIN_RANKS = [0 for _ in ISOC_KINDS]
 
-$:setvar("MAXRANK_ISO_C", getvar("MAXRANK_ISO_C", 1))
-#:set ISOC_MAX_RANKS = [MAXRANK_ISO_C for _ in ISOC_KINDS]
+$:setvar("FDICT_MAXRANK_ISO_C", getvar("FDICT_MAXRANK_ISO_C", 1))
+#:set ISOC_MAX_RANKS = [FDICT_MAXRANK_ISO_C for _ in ISOC_KINDS]
 
 
 #! Define a list of all available types

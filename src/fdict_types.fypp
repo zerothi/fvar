@@ -2,13 +2,13 @@
 
 module fdict_types
 
-#:if WITH_ISO_C == 1
+#:if FDICT_WITH_ISO_C == 1
 #:for kind in ISOC_KINDS
   use, intrinsic :: iso_c_binding, only: ${kind}$
 #:endfor
 #:endif
 
-#:if WITH_ISO_ENV == 1
+#:if FDICT_WITH_ISO_ENV == 1
 
 #:for kind in INT_KINDS + REAL_KINDS
 #: if kind != "real80"
@@ -19,27 +19,27 @@ module fdict_types
 #! This might produce errors if int8 is not set, but log8 is
 #! to handle more beautiful
 
-#:if WITH_LOG8 == 1
+#:if FDICT_WITH_LOG8 == 1
   integer, parameter :: log8 = int8
 #:endif
-#:if WITH_LOG16 == 1
+#:if FDICT_WITH_LOG16 == 1
   integer, parameter :: log16 = int16
 #:endif
   integer, parameter :: log32 = int32
-#:if WITH_LOG64 == 1
+#:if FDICT_WITH_LOG64 == 1
   integer, parameter :: log64 = int64
 #:endif
-#:if WITH_REAL80 == 1
+#:if FDICT_WITH_REAL80 == 1
   #! Not part of the iso_fortran_env
   integer, parameter :: real80 = selected_real_kind(18)
 #:endif
 
 #:else
 
-#:if WITH_INT8 == 1
+#:if FDICT_WITH_INT8 == 1
   integer, parameter :: int8 = selected_int_kind(2)
 #:endif
-#:if WITH_INT16 == 1
+#:if FDICT_WITH_INT16 == 1
   integer, parameter :: int16 = selected_int_kind(4)
 #:endif
   integer, parameter :: int32 = selected_int_kind(9)
@@ -47,21 +47,21 @@ module fdict_types
 
   integer, parameter :: real32 = selected_real_kind(6)
   integer, parameter :: real64 = selected_real_kind(15)
-#:if WITH_REAL80 == 1
+#:if FDICT_WITH_REAL80 == 1
   integer, parameter :: real80 = selected_real_kind(18)
 #:endif
-#:if WITH_REAL128 == 1
+#:if FDICT_WITH_REAL128 == 1
   integer, parameter :: real128 = selected_real_kind(30)
 #:endif
 
-#:if WITH_LOG8 == 1
+#:if FDICT_WITH_LOG8 == 1
   integer, parameter :: log8 = selected_int_kind(2)
 #:endif
-#:if WITH_LOG16 == 1
+#:if FDICT_WITH_LOG16 == 1
   integer, parameter :: log16 = selected_int_kind(4)
 #:endif
   integer, parameter :: log32 = selected_int_kind(9)
-#:if WITH_LOG64 == 1
+#:if FDICT_WITH_LOG64 == 1
   integer, parameter :: log64 = int64
 #:endif
 

@@ -13,22 +13,22 @@ $:"#:set {} = {}".format(name, value)
 #:endif
 #:enddef
 #!
-$:set_constant("FDICT_VERSION", "'{}.{}.{}'".format(PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_PATCH))
-$:set_constant("FDICT_MAJOR", PROJECT_VERSION_MAJOR)
-$:set_constant("FDICT_MINOR", PROJECT_VERSION_MINOR)
-$:set_constant("FDICT_PATCH", PROJECT_VERSION_PATCH)
+$:set_constant("FDICT_VERSION", "'{}.{}.{}'".format(FDICT_VERSION_MAJOR, FDICT_VERSION_MINOR, FDICT_VERSION_PATCH))
+$:set_constant("FDICT_MAJOR", FDICT_VERSION_MAJOR)
+$:set_constant("FDICT_MINOR", FDICT_VERSION_MINOR)
+$:set_constant("FDICT_PATCH", FDICT_VERSION_PATCH)
 
 #! customizability of the code
-$:set_constant("WITH_PURE_INTERFACE")
+$:set_constant("FDICT_WITH_PURE_INTERFACE")
 
 #:for v in ["ISO_C", "ISO_ENV", &
 	& "REAL80", "REAL128", &
 	& "INT8", "INT16", &
 	& "LOG8", "LOG16", "LOG64"]
-$:set_constant("WITH_{}".format(v))
+$:set_constant("FDICT_WITH_{}".format(v))
 #:endfor
 
-$:set_constant("MAXRANK")
+$:set_constant("FDICT_MAXRANK")
 #:for v in ["INT", "REAL", "CMPLX", "LOG", "ISO_C"]
-$:set_constant("MAXRANK_{}".format(v))
+$:set_constant("FDICT_MAXRANK_{}".format(v))
 #:endfor

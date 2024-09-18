@@ -1,11 +1,24 @@
 @PACKAGE_INIT@
 
+include(CheckLanguage)
+
 # Check that the fortran language is enabled
 check_language(Fortran)
 if( NOT CMAKE_Fortran_COMPILER )
   message(FATAL_ERROR "fdict package requires Fortran language support")
 endif()
 # should we instead just enable it in the config file?
+
+set(PROJECT_NAME "@PROJECT_NAME@")
+string(TOUPPER PROJECT_NAME_UPPER "${PROJECT_NAME}")
+
+set(${PROJECT_NAME}_CMAKE_BUILD_TYPE "@CMAKE_BUILD_TYPE@")
+set(${PROJECT_NAME}_Fortran_COMPILER_FLAGS "@CMAKE_Fortran_COMPILER_FLAGS@")
+set(${PROJECT_NAME}_Fortran_COMPILER "@CMAKE_Fortran_COMPILER@")
+set(${PROJECT_NAME}_Fortran_COMPILER_ID "@CMAKE_Fortran_COMPILER_ID@")
+set(${PROJECT_NAME}_VERSION "@PROJECT_VERSION@")
+
+set(${PROJECT_NAME}_WITH_PURE_INTERFACE "@FDICT_WITH_PURE_INTERFACE@")
 
 
 # Define all the available components
@@ -23,34 +36,49 @@ set(_valid_components
   )
 
 
-string(TOUPPER PROJECT_NAME_UPPER "@PROJECT_NAME@")
 
-set_and_check(${PROJECT_NAME_UPPER}_FYPPFLAGS "@FYPPFLAGS@")
+macro(set_default name default value)
+  if("" STREQUAL "${value}")
+    set(${name} "${default}")
+  else()
+    set(${name} "${value}")
+  endif()
+endmacro()
+macro(set_false name value)
+  set_default(${name} FALSE "${value}")
+endmacro()
 
-set_and_check(${PROJECT_NAME_UPPER}_WITH_PURE_INTERFACE "@WITH_PURE_INTERFACE@")
 
-set_and_check(${PROJECT_NAME_UPPER}_WITH_INT8 "@WITH_INT8@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_INT16 "@WITH_INT16@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_REAL80 "@WITH_REAL80@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_REAL128 "@WITH_REAL128@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_LOG8 "@WITH_LOG8@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_LOG16 "@WITH_LOG16@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_LOG64 "@WITH_LOG64@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_ISO_C "@WITH_ISO_C@")
-set_and_check(${PROJECT_NAME_UPPER}_WITH_ISO_ENV "@WITH_ISO_ENV@")
+set(${PROJECT_NAME}_FYPPFLAGS "@FDICT_FYPPFLAGS@")
 
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK "@MAXRANK@")
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK_INT "@MAXRANK_INT@")
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK_REAL "@MAXRANK_REAL@")
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK_CMPLX "@MAXRANK_CMPLX@")
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK_LOG "@MAXRANK_LOG@")
-set_and_check(${PROJECT_NAME_UPPER}_MAXRANK_ISO_C "@MAXRANK_ISO_C@")
+set_false(${PROJECT_NAME}_WITH_PURE_INTERFACE "@FDICT_WITH_PURE_INTERFACE@")
 
+set_false(${PROJECT_NAME}_WITH_INT8 "@FDICT_WITH_INT8@")
+set_false(${PROJECT_NAME}_WITH_INT16 "@FDICT_WITH_INT16@")
+set_false(${PROJECT_NAME}_WITH_REAL80 "@FDICT_WITH_REAL80@")
+set_false(${PROJECT_NAME}_WITH_REAL128 "@FDICT_WITH_REAL128@")
+set_false(${PROJECT_NAME}_WITH_LOG8 "@FDICT_WITH_LOG8@")
+set_false(${PROJECT_NAME}_WITH_LOG16 "@FDICT_WITH_LOG16@")
+set_false(${PROJECT_NAME}_WITH_LOG64 "@FDICT_WITH_LOG64@")
+set_false(${PROJECT_NAME}_WITH_ISO_C "@FDICT_WITH_ISO_C@")
+set_false(${PROJECT_NAME}_WITH_ISO_ENV "@FDICT_WITH_ISO_ENV@")
+
+set_default(${PROJECT_NAME}_MAXRANK 0 "@FDICT_MAXRANK@")
+set_default(${PROJECT_NAME}_MAXRANK_INT 0 "@FDICT_MAXRANK_INT@")
+set_default(${PROJECT_NAME}_MAXRANK_REAL 0 "@FDICT_MAXRANK_REAL@")
+set_default(${PROJECT_NAME}_MAXRANK_CMPLX 0 "@FDICT_MAXRANK_CMPLX@")
+set_default(${PROJECT_NAME}_MAXRANK_LOG 0 "@FDICT_MAXRANK_LOG@")
+set_default(${PROJECT_NAME}_MAXRANK_ISO_C 0 "@FDICT_MAXRANK_ISO_C@")
+
+set_and_check(${PROJECT_NAME}_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@")
+set_and_check(${PROJECT_NAME}_LIBDIR "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@")
+
+set(${PROJECT_NAME}_FOUND TRUE)
 # Convert to components
 foreach(comp IN LISTS _valid_components)
-  set(${PROJECT_NAME_UPPER}_${comp}_FOUND "${${PROJECT_NAME_UPPER}_WITH_${comp}}")
+  set(${PROJECT_NAME}_${comp}_FOUND "${${PROJECT_NAME}_WITH_${comp}}")
 endforeach()
 
 include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
 
-check_required_components(${PROJECT_NAME_UPPER})
+check_required_components("${PROJECT_NAME}")

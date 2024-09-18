@@ -166,7 +166,8 @@ FYPPFLAGS += -DWITH_LOG64=1 # for logical kind(18)
 FYPPFLAGS += -DWITH_ISO_C=1 # for enabling c_ptr and c_funptr
 ```
 
-For `cmake` the same arguments can be made at the command-line.
+For `cmake` the variables are all prefixed with `FDICT_`, e.g. `-DFDICT_FYPPFLAGS`,
+to ensure there are no clashes with parent programs.
 
 By default `fdict` generates the kind specifications from the `selected_*_kind` routines,
 however, if one wishes to use the `iso_fortran_env` module simply add `FYPPFLAGS += -DWITH_ISO_ENV`.

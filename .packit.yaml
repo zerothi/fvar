@@ -1,0 +1,80 @@
+specfile_path: .distro/fdict.spec
+files_to_sync:
+  - src: .distro/fdict.spec
+    dest: fdict.spec
+  - .packit.yaml
+  - src: .distro/fdict.rpmlintrc
+    dest: fdict.rpmlintrc
+  # tmt setup
+  - src: .distro/.fmf/
+    dest: .fmf/
+  - src: .distro/plans/
+    dest: plans/
+    filters:
+      - "- .distro/plans/main.fmf.dist-git"
+      - "- .distro/plans/rpmlint.fmf"
+  - src: .distro/plans/main.fmf.dist-git
+    dest: plans/main.fmf
+
+upstream_package_name: fdict
+downstream_package_name: fdict
+update_release: false
+upstream_tag_template: v{version}
+
+jobs:
+  - job: copr_build
+    trigger: pull_request
+    owner: lecris
+    project: fdict
+    update_release: true
+    release_suffix: "{PACKIT_RPMSPEC_RELEASE}"
+    targets:
+      # TODO: Change before production
+      #- fedora-development
+      - fedora-all
+  - job: tests
+    trigger: pull_request
+    targets:
+      # TODO: Change before production
+      #- fedora-development
+      - fedora-all
+    fmf_path: .distro
+  - job: copr_build
+    trigger: commit
+    branch: main
+    owner: lecris
+    project: nightly
+    targets:
+      - fedora-all-x86_64
+      - fedora-all-aarch64
+    additional_repos:
+      - copr://@scikit-build/release
+  - job: tests
+    trigger: commit
+    branch: main
+    targets:
+      - fedora-all
+  - job: copr_build
+    trigger: release
+    owner: lecris
+    project: release
+    targets:
+      - fedora-all-x86_64
+      - fedora-all-aarch64
+    additional_repos:
+      # TODO: Required for now until related issue is resolved
+      # https://github.com/packit/packit/issues/1917
+      - copr://@scikit-build/release
+## TODO: Disabled until released on src.fedoraproject.org
+#  - job: propose_downstream
+#    trigger: release
+#    dist_git_branches:
+#      - fedora-development
+#  - job: koji_build
+#    trigger: commit
+#    dist_git_branches:
+#      - fedora-all
+#  - job: bodhi_update
+#    trigger: commit
+#    dist_git_branches:
+#      - fedora-all

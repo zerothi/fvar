@@ -1,0 +1,5 @@
+/main.fmf
+/plans/main.fmf
+/tests/main.fmf
+!*.spec
+*.tar.gz
